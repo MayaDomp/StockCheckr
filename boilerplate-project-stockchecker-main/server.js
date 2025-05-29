@@ -10,7 +10,25 @@ const runner            = require('./test-runner');
 const helmet = require('helmet')
 const app = express();
 
-app.use
+//Helmet Security
+const helmet = require('helmet')
+const ninetyDaysInSeconds = 90*24*60*60;
+let timeInSeconds = ninetyDaysInSeconds;
+app.use(helmet({
+  frameguard: {
+    action: 'deny'
+  },
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'",'trusted-cdn.com'],
+    }
+  },
+  dnsPrefetchControl: false,
+  hsts: {force: true},
+  noCache: true,
+}))
+
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
